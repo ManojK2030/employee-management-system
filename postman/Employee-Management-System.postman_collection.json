@@ -1,0 +1,217 @@
+{
+  "info": {
+    "name": "Employee Management System",
+    "description": "Sample requests for the Employee Management REST API. Run the requests top to bottom: 'Create employee' stores the new ID in {{employeeId}}, which the later requests use. Change the baseUrl collection variable if the API runs elsewhere.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "employeeId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "1. Create employee",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const body = pm.response.json();",
+              "pm.test('has generated id', () => pm.expect(body.id).to.be.a('number'));",
+              "pm.collectionVariables.set('employeeId', body.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Demo User\",\n  \"email\": \"demo.user.{{$timestamp}}@example.com\",\n  \"phoneNumber\": \"+91 98765 43210\",\n  \"department\": \"Engineering\",\n  \"designation\": \"Backend Developer\",\n  \"dateOfJoining\": \"2024-07-01\",\n  \"salary\": 850000.00,\n  \"status\": \"ACTIVE\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/employees", "host": ["{{baseUrl}}"], "path": ["api", "employees"] }
+      }
+    },
+    {
+      "name": "2. Get employee by ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/api/employees/{{employeeId}}", "host": ["{{baseUrl}}"], "path": ["api", "employees", "{{employeeId}}"] }
+      }
+    },
+    {
+      "name": "3. List employees (paginated)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('has page metadata', () => {",
+              "  const b = pm.response.json();",
+              "  pm.expect(b).to.have.property('content');",
+              "  pm.expect(b).to.have.property('totalElements');",
+              "  pm.expect(b).to.have.property('totalPages');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/employees?page=0&size=10&sortBy=id&sortDir=desc",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "employees"],
+          "query": [
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "10" },
+            { "key": "sortBy", "value": "id" },
+            { "key": "sortDir", "value": "desc" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. Search by name or email",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/employees?search=priya",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "employees"],
+          "query": [{ "key": "search", "value": "priya" }]
+        }
+      }
+    },
+    {
+      "name": "5. Filter by department and status",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/employees?department=Engineering&status=ACTIVE&page=0&size=5",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "employees"],
+          "query": [
+            { "key": "department", "value": "Engineering" },
+            { "key": "status", "value": "ACTIVE" },
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "5" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Update employee",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('changes applied', () => pm.expect(pm.response.json().designation).to.eql('Senior Backend Developer'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Demo User\",\n  \"email\": \"demo.user.{{$timestamp}}@example.com\",\n  \"phoneNumber\": \"+91 98765 43210\",\n  \"department\": \"Engineering\",\n  \"designation\": \"Senior Backend Developer\",\n  \"dateOfJoining\": \"2024-07-01\",\n  \"salary\": 1100000.00,\n  \"status\": \"ACTIVE\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/employees/{{employeeId}}", "host": ["{{baseUrl}}"], "path": ["api", "employees", "{{employeeId}}"] }
+      }
+    },
+    {
+      "name": "7. List departments",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/api/employees/departments", "host": ["{{baseUrl}}"], "path": ["api", "employees", "departments"] }
+      }
+    },
+    {
+      "name": "8. Export CSV (with filters)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/employees/export?department=Engineering",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "employees", "export"],
+          "query": [{ "key": "department", "value": "Engineering" }]
+        }
+      }
+    },
+    {
+      "name": "9. Delete employee",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('204 No Content', () => pm.response.to.have.status(204));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "{{baseUrl}}/api/employees/{{employeeId}}", "host": ["{{baseUrl}}"], "path": ["api", "employees", "{{employeeId}}"] }
+      }
+    },
+    {
+      "name": "Error: validation failure (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('field errors returned', () => pm.expect(pm.response.json().fieldErrors).to.have.property('email'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"\",\n  \"email\": \"not-an-email\",\n  \"phoneNumber\": \"abc\",\n  \"department\": \"Engineering\",\n  \"designation\": \"Developer\",\n  \"dateOfJoining\": \"2024-07-01\",\n  \"salary\": -10,\n  \"status\": \"ACTIVE\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/employees", "host": ["{{baseUrl}}"], "path": ["api", "employees"] }
+      }
+    },
+    {
+      "name": "Error: employee not found (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('404 Not Found', () => pm.response.to.have.status(404));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/api/employees/999999", "host": ["{{baseUrl}}"], "path": ["api", "employees", "999999"] }
+      }
+    }
+  ]
+}

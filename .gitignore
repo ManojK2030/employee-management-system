@@ -1,0 +1,46 @@
+# Java / Maven
+backend/target/
+*.class
+*.log
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Local secrets
+.env
+# Java / Maven
+backend/target/
+*.class
+*.log
+
+# Node.js / Vite
+frontend/node_modules/
+frontend/dist/
+npm-debug.log*
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Local Spring configuration
+backend/src/main/resources/application-local.properties
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# Operating system
+.DS_Store
+Thumbs.db
