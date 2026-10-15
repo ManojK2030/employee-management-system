@@ -36,7 +36,7 @@ The first build downloads dependencies and takes a few minutes. Then open:
 
 | What        | URL                                   |
 |-------------|---------------------------------------|
-| Application | http://localhost:3000                 |
+| Application | http://localhost:5173                |
 | REST API    | http://localhost:8080/api/employees   |
 | Swagger UI  | http://localhost:8080/swagger-ui.html |
 | MySQL       | `localhost:3307`, user `root`, password `root`, database `ems_db` |
@@ -214,9 +214,10 @@ employee-management-system/
 
 Screenshots of the running application are in [`docs/screenshots`](docs/screenshots):
 
-| Employee list (search, filters, pagination) | Add / edit form | Employee details | Delete confirmation |
-|---|---|---|---|
-| `01-employee-list.png` | `02-add-employee.png` | `03-employee-details.png` | `04-delete-confirmation.png` |
+| Employee list (search, filters, pagination) | Swagger-ui |
+|---|---|
+| `01-employee-list.png` <img width="1474" height="722" alt="image" src="https://github.com/user-attachments/assets/852c2139-a0b5-4a1e-bb1b-470b8573552f" /> | `02-swagger-ui.png`<img width="1477" height="771" alt="Screenshot 2026-10-15 215137" src="https://github.com/user-attachments/assets/eca219dc-a2c2-4fe3-86d5-d5bac72c02d7" />
+ 
 
 ## Troubleshooting
 
