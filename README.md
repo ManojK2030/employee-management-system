@@ -39,7 +39,7 @@ The first build downloads dependencies and takes a few minutes. Then open:
 | Application | http://localhost:5173                |
 | REST API    | http://localhost:8080/api/employees   |
 | Swagger UI  | http://localhost:8080/swagger-ui.html |
-| MySQL       | `localhost:3307`, user `root`, password `root`, database `ems_db` |
+| MySQL       | `localhost:3307`, user `root`, password `your_db_password`, database `ems_db` |
 
 On first start MySQL runs `database/schema.sql` and `database/seed.sql`, so the app opens with 30 sample employees.
 To start again from an empty database: `docker compose down -v`.
